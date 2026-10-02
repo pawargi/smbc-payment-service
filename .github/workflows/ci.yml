@@ -9,12 +9,14 @@ on:
 
 jobs:
   build-and-test:
-    name: Build and Test
+    name: Build, Test and Code Quality
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -30,5 +32,10 @@ jobs:
       - name: Run Automated Tests
         run: npm test
 
+      - name: SonarQube Cloud Scan
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
       - name: Build Complete
-        run: echo "SMBC Payment Service build completed successfully"
+        run: echo "SMBC Payment Service CI completed successfully"
