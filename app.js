@@ -6,6 +6,13 @@ function validatePayment(amount) {
         };
     }
 
+    if (amount > 10000) {
+        return {
+            approved: false,
+            message: "Payment exceeds maximum allowed amount"
+        };
+    }
+
     return {
         approved: true,
         message: "Payment approved"
