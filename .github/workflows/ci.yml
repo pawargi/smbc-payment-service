@@ -40,7 +40,7 @@ jobs:
       - name: Build Complete
         run: echo "SMBC Payment Service CI completed successfully"
 
-        production-deployment:
+  production-deployment:
     name: Production Deployment
     needs: build-and-test
     runs-on: ubuntu-latest
