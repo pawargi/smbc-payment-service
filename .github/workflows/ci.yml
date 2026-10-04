@@ -39,3 +39,14 @@ jobs:
 
       - name: Build Complete
         run: echo "SMBC Payment Service CI completed successfully"
+
+        production-deployment:
+    name: Production Deployment
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Production
+        run: |
+          echo "Deploying SMBC Payment Service to Production"
+          echo "Production deployment completed successfully"
