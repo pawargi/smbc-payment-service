@@ -36,7 +36,7 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-       - name: ServiceNow DevOps Sonar Scan Results
+      - name: ServiceNow DevOps Sonar Scan Results
         uses: ServiceNow/servicenow-devops-sonar@v7.0.0
         with:
           devops-integration-token: ${{ secrets.SN_DEVOPS_INTEGRATION_TOKEN }}
