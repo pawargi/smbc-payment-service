@@ -2,9 +2,11 @@ name: SMBC Payment Service CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+      - feature/SCRUM-24-payment-validation
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -34,8 +36,22 @@ jobs:
 
       - name: SonarQube Cloud Scan
         uses: SonarSource/sonarqube-scan-action@v6
+        with:
+          args: >
+            -Dsonar.branch.name=feature/SCRUM-24-payment-validation
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: ServiceNow DevOps Sonar Scan Results
+        uses: ServiceNow/servicenow-devops-sonar@v7.0.0
+        with:
+          devops-integration-token: ${{ secrets.SN_DEVOPS_INTEGRATION_TOKEN }}
+          instance-url: ${{ secrets.SN_INSTANCE_URL }}
+          tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
+          context-github: ${{ toJSON(github) }}
+          job-name: 'Build, Test and Code Quality'
+          sonar-host-url: ${{ secrets.SONAR_URL }}
+          sonar-project-key: ${{ secrets.SONAR_PROJECT_KEY }}
+          sonar-org-key: ${{ secrets.SONAR_ORG_KEY }}
 
       - name: Build Complete
         run: echo "SMBC Payment Service CI completed successfully"
@@ -46,6 +62,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: ServiceNow Change
+        uses: ServiceNow/servicenow-devops-change@v6.1.0
+        id: create
+        with:
+          devops-integration-token: ${{ secrets.SN_DEVOPS_INTEGRATION_TOKEN }}
+          instance-url: ${{ secrets.SN_INSTANCE_URL }}
+          tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
+          context-github: ${{ toJSON(github) }}
+          job-name: 'Production Deployment'
+
       - name: Deploy to Production
         run: |
           echo "Deploying SMBC Payment Service to Production"
