@@ -34,6 +34,9 @@ jobs:
 
       - name: SonarQube Cloud Scan
         uses: SonarSource/sonarqube-scan-action@v6
+        with:
+          args: >
+            -Dsonar.branch.name=feature/SCRUM-24-payment-validation
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: ServiceNow DevOps Sonar Scan Results
